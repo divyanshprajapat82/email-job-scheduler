@@ -58,7 +58,7 @@ let login = async (req, res) => {
 			.cookie("token", token, {
 				httpOnly: true,
 				secure: false,
-				sameSite: "lax",
+				sameSite: "none",
 				maxAge: 7 * 24 * 60 * 60 * 1000,
 			})
 			.status(200)
@@ -217,7 +217,7 @@ let googleLogin = async (req, res) => {
 			.cookie("token", token, {
 				httpOnly: true,
 				secure: false, // Use true with HTTPS in production
-				sameSite: "lax",
+				sameSite: "none",
 				maxAge: 7 * 24 * 60 * 60 * 1000,
 				path: "/",
 			})

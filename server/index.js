@@ -171,15 +171,40 @@ app.use(cookieParser());
 app.use(express.json());
 
 // 3. MongoDB connection middleware
+// app.use(async (req, res, next) => {
+// 	try {
+// 		if (!process.env.MONGODB_URL) {
+// 			throw new Error("MONGODB_URL is missing");
+// 		}
+
+// 		if (mongoose.connection.readyState !== 1) {
+// 			await mongoose.connect(process.env.MONGODB_URL, {
+// 				serverSelectionTimeoutMS: 10000,
+// 			});
+
+// 			console.log("MongoDB connected:", mongoose.connection.name);
+// 		}
+
+// 		next();
+// 	} catch (error) {
+// 		console.error("MongoDB connection error:", error.message);
+
+// 		return res.status(500).json({
+// 			success: false,
+// 			message: "Database connection failed",
+// 		});
+// 	}
+// });
+
 app.use(async (req, res, next) => {
 	try {
 		if (!process.env.MONGODB_URL) {
-			throw new Error("MONGODB_URL is missing");
+			throw new Error("MONGODB_URL is missing in Vercel");
 		}
 
 		if (mongoose.connection.readyState !== 1) {
 			await mongoose.connect(process.env.MONGODB_URL, {
-				serverSelectionTimeoutMS: 10000,
+				serverSelectionTimeoutMS: 15000,
 			});
 
 			console.log("MongoDB connected:", mongoose.connection.name);
@@ -187,11 +212,12 @@ app.use(async (req, res, next) => {
 
 		next();
 	} catch (error) {
-		console.error("MongoDB connection error:", error.message);
+		console.error("MongoDB connection error:", error);
 
 		return res.status(500).json({
 			success: false,
 			message: "Database connection failed",
+			error: error.message,
 		});
 	}
 });
