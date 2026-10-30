@@ -88,7 +88,7 @@ export default function RegisterPage() {
 					Sign Up
 				</h1>
 
-				<button
+				{/* <button
 					type="button"
 					className="w-full flex items-center justify-center gap-2 px-4 py-3 mb-8 bg-[#EEF5F0] hover:bg-[#e2ede5] transition-colors rounded-md text-[15px] font-medium text-gray-800 cursor-pointer"
 				>
@@ -111,7 +111,7 @@ export default function RegisterPage() {
 						/>
 					</svg>
 					Sign up with Google
-				</button>
+				</button> */}
 
 				<div className="flex items-center mb-8">
 					<div className="flex-grow border-t border-gray-100"></div>
