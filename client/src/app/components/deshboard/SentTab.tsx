@@ -3,13 +3,14 @@ import { context } from "@/app/context/mainContext";
 import React from "react";
 
 interface Email {
-	_id: string;
-	recipient: string;
-	subject: string;
-	body: string;
-	scheduledAt: string;
-	sentAt?: string | null;
-	status: "SCHEDULED" | "PROCESSING" | "SENT" | "FAILED" | "CANCELLED";
+    _id: string;
+    recipient: string;
+    recipientName?: string; 
+    subject: string;
+    body: string;
+    scheduledAt: string;
+    sentAt?: string | null;
+    status: "SCHEDULED" | "PROCESSING" | "SENT" | "FAILED" | "CANCELLED";
 }
 
 export default function SentTab() {
