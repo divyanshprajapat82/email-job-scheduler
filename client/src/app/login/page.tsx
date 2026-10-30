@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { context } from "../context/mainContext";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getAuth } from "firebase/auth";
-import { app } from "../config/firebase";
+// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+// import { getAuth } from "firebase/auth";
+// import { app } from "../config/firebase";
 
 export default function LoginPage() {
-	const provider = new GoogleAuthProvider();
-	const auth = getAuth(app);
+	// const provider = new GoogleAuthProvider();
+	// const auth = getAuth(app);
 	const [data, setData] = useState({
 		email: "",
 		password: "",
@@ -51,89 +51,89 @@ export default function LoginPage() {
 			});
 	};
 
-	const googleLogin = () => {
-		// const auth = getAuth();
-		signInWithPopup(auth, provider)
-			.then((result) => {
-				// This gives you a Google Access Token. You can use it to access the Google API.
-				// const credential = GoogleAuthProvider.credentialFromResult(result);
-				const credential = GoogleAuthProvider.credentialFromResult(result);
-				if (!credential) {
-					throw new Error("Unable to get Google credentials");
-				}
-				const token = credential.accessToken;
-				// The signed-in user info.
-				const user = result.user;
-
-				// console.log(user);
-
-				const obj = {
-					name: user.displayName,
-					email: user.email,
-				};
-
-				axios
-					.post(`${APIURL}/auth/google-login`, obj, {
-						withCredentials: true,
-					})
-					.then((res) => res.data)
-					.then((finalData) => {
-						if (finalData.success) {
-							getMe();
-							router.push("/");
-						}
-					});
-
-				// IdP data available using getAdditionalUserInfo(result)
-				// ...
-			})
-			.catch((error) => {
-				// Handle Errors here.
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				// The email of the user's account used.
-				const email = error.customData.email;
-				// The AuthCredential type that was used.
-				const credential = GoogleAuthProvider.credentialFromError(error);
-				// ...
-			});
-	};
-
-	// const googleLogin = async () => {
-	// 	try {
-	// 		const { GoogleAuthProvider, signInWithPopup, getAuth } =
-	// 			await import("firebase/auth");
-	
-	// 		const { app } = await import("../config/firebase");
-	
-	// 		const auth = getAuth(app);
-	// 		const provider = new GoogleAuthProvider();
-	
-	// 		const result = await signInWithPopup(auth, provider);
-	
-	// 		const user = result.user;
-	
-	// 		const obj = {
-	// 			name: user.displayName,
-	// 			email: user.email,
-	// 		};
-	
-	// 		const res = await axios.post(
-	// 			`${APIURL}/auth/google-login`,
-	// 			obj,
-	// 			{
-	// 				withCredentials: true,
+	// const googleLogin = () => {
+	// 	// const auth = getAuth();
+	// 	signInWithPopup(auth, provider)
+	// 		.then((result) => {
+	// 			// This gives you a Google Access Token. You can use it to access the Google API.
+	// 			// const credential = GoogleAuthProvider.credentialFromResult(result);
+	// 			const credential = GoogleAuthProvider.credentialFromResult(result);
+	// 			if (!credential) {
+	// 				throw new Error("Unable to get Google credentials");
 	// 			}
-	// 		);
-	
-	// 		if (res.data.success) {
-	// 			await getMe();
-	// 			router.push("/");
-	// 		}
-	// 	} catch (error) {
-	// 		console.error("Google login error:", error);
-	// 	}
+	// 			const token = credential.accessToken;
+	// 			// The signed-in user info.
+	// 			const user = result.user;
+
+	// 			console.log(user);
+
+	// 			const obj = {
+	// 				name: user.displayName,
+	// 				email: user.email,
+	// 			};
+
+	// 			axios
+	// 				.post(`${APIURL}/auth/google-login`, obj, {
+	// 					withCredentials: true,
+	// 				})
+	// 				.then((res) => res.data)
+	// 				.then((finalData) => {
+	// 					if (finalData.success) {
+	// 						getMe();
+	// 						router.push("/");
+	// 					}
+	// 				});
+
+	// 			// IdP data available using getAdditionalUserInfo(result)
+	// 			// ...
+	// 		})
+	// 		.catch((error) => {
+	// 			// Handle Errors here.
+	// 			const errorCode = error.code;
+	// 			const errorMessage = error.message;
+	// 			// The email of the user's account used.
+	// 			const email = error.customData.email;
+	// 			// The AuthCredential type that was used.
+	// 			const credential = GoogleAuthProvider.credentialFromError(error);
+	// 			// ...
+	// 		});
 	// };
+
+	const googleLogin = async () => {
+		try {
+			const { GoogleAuthProvider, signInWithPopup, getAuth } =
+				await import("firebase/auth");
+	
+			const { app } = await import("../config/firebase");
+	
+			const auth = getAuth(app);
+			const provider = new GoogleAuthProvider();
+	
+			const result = await signInWithPopup(auth, provider);
+	
+			const user = result.user;
+	
+			const obj = {
+				name: user.displayName,
+				email: user.email,
+			};
+	
+			const res = await axios.post(
+				`${APIURL}/auth/google-login`,
+				obj,
+				{
+					withCredentials: true,
+				}
+			);
+	
+			if (res.data.success) {
+				await getMe();
+				router.push("/");
+			}
+		} catch (error) {
+			console.error("Google login error:", error);
+		}
+	};
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setData({
