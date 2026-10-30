@@ -47,25 +47,46 @@ const dns = require("dns");
 
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
-(async () => {
+// (async () => {
+// 	try {
+// 		// await mongoose.connect("mongodb://127.0.0.1:27017/jobListener", {
+// 		await mongoose.connect(process.env.MONGODB_URL, {
+// 			serverSelectionTimeoutMS: 5000,
+// 		});
+
+// 		console.log("✅ MongoDB connected:", mongoose.connection.name);
+// 		require("./app/workers/emailWorker");
+
+// 		// console.log("JWT_SECRET loaded:", Boolean(process.env.JWT_SECRET));
+
+// 		app.listen(process.env.PORT || 8000, () => {
+// 			console.log("🚀 Server running on PORT", process.env.PORT || 8000);
+// 		});
+// 	} catch (err) {
+// 		console.log("❌ MongoDB connect error:", err.message);
+// 	}
+// })();
+
+let isConnected = false;
+
+app.use(async (req, res, next) => {
 	try {
-		// await mongoose.connect("mongodb://127.0.0.1:27017/jobListener", {
-		await mongoose.connect(process.env.MONGODB_URL, {
-			serverSelectionTimeoutMS: 5000,
+		if (mongoose.connection.readyState !== 1) {
+			await mongoose.connect(process.env.MONGODB_URL, {
+				serverSelectionTimeoutMS: 10000,
+			});
+		}
+
+		isConnected = true;
+		next();
+	} catch (error) {
+		console.error("MongoDB connection error:", error.message);
+		res.status(500).json({
+			success: false,
+			message: "Database connection failed",
 		});
-
-		console.log("✅ MongoDB connected:", mongoose.connection.name);
-		require("./app/workers/emailWorker");
-
-		// console.log("JWT_SECRET loaded:", Boolean(process.env.JWT_SECRET));
-
-		app.listen(process.env.PORT || 8000, () => {
-			console.log("🚀 Server running on PORT", process.env.PORT || 8000);
-		});
-	} catch (err) {
-		console.log("❌ MongoDB connect error:", err.message);
 	}
-})();
+});
 
 // app.use(
 //   cors({
