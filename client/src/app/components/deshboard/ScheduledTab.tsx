@@ -53,6 +53,7 @@ export default function ScheduledTab() {
 							{/* To: John Smith */}
 							{/* {email.userId?.name} */}
 							TO: {email?.recipientName || email?.recipient}
+							
 						</div>
 
 						<div className="flex-shrink-0 mr-4">
